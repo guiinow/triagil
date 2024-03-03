@@ -23,37 +23,60 @@ export class TeamsService {
   async create(createTeamDto: CreateTeamDto): Promise<Team> {
     try {
       if (
-        !createTeamDto.username ||
-        !createTeamDto.pokemonList ||
-        createTeamDto.pokemonList.length === 0
+        !createTeamDto.user ||
+        !createTeamDto.team ||
+        createTeamDto.team.length === 0
       ) {
         this.logger.error(
-          'Invalid data, please make sure to inform the username and the pokemon list',
+          'Invalid data, please make sure to inform the user and at least one Pokémon name',
         );
         throw new HttpException(
-          'Invalid data, please make sure to inform the username and the pokemon list',
+          'Invalid data, please make sure to inform the user and at least one Pokémon name',
           HttpStatus.BAD_REQUEST,
         );
       }
 
-      const pokemonName = createTeamDto.pokemonList[0];
-      const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
+      const pokemonPromises = createTeamDto.team.map(async (pokemonName) => {
+        const lowercasedName = pokemonName.toLowerCase();
+        const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${lowercasedName}`;
 
-      const response = await axios.get(pokemonUrl);
+        try {
+          const response = await axios.get(pokemonUrl);
+          if (response.status !== 200) {
+            throw new Error(`Failed to fetch data for ${pokemonName}`);
+          }
 
-      const { name, height, weight } = response.data;
-
-      const newTeam = this.teamRepository.create({
-        username: createTeamDto.username,
-        pokemonList: [name, height, weight],
+          return {
+            id: response.data.id,
+            name: response.data.name,
+            height: response.data.height,
+            weight: response.data.weight,
+          };
+        } catch (error) {
+          this.logger.error(
+            `Failed to fetch data for ${pokemonName}: ${error.message}`,
+          );
+          throw new HttpException(
+            `Failed to fetch data for ${pokemonName}`,
+            HttpStatus.BAD_REQUEST,
+          );
+        }
       });
 
-      await this.teamRepository.save(newTeam);
-      return newTeam;
+      const pokemons = await Promise.all(pokemonPromises);
+
+      const team = this.teamRepository.create({
+        user: createTeamDto.user,
+        team: pokemons,
+      });
+
+      await this.teamRepository.save(team);
+
+      return team;
     } catch (error) {
-      this.logger.error('An unexpected error occurred:', error);
+      this.logger.error(`Failed to create team: ${error.message}`);
       throw new HttpException(
-        'Internal Server Error',
+        `Failed to create team: ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -85,7 +108,7 @@ export class TeamsService {
    *@returns O time de Pokémon encontrado.
    *@throws {HttpException} Se o time com o ID especificado não for encontrado ou ocorrer um erro durante a busca.
    */
-  
+
   async findOne(id: number): Promise<Team> {
     try {
       const team = await this.teamRepository.findOne({ where: { id } });

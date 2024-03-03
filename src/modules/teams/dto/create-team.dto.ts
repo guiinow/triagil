@@ -9,13 +9,25 @@ export class CreateTeamDto {
   })
   @IsString()
   @IsNotEmpty()
-  username: string;
+  user: string;
 
   @ApiProperty({
-    type: [String],
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        height: { type: 'number' },
+        weight: { type: 'number' },
+      },
+    },
     description: 'The list of pokemons in the team',
-    example: ['Pikachu', 'Charizard', 'Bulbasaur'],
+    example: [
+      { name: 'Pikachu', height: 0.4, weight: 6 },
+      { name: 'Charizard', height: 1.7, weight: 90.5 },
+      { name: 'Bulbasaur', height: 0.7, weight: 6.9 },
+    ],
   })
   @IsNotEmpty()
-  pokemonList: string[];
+  team: string[];
 }

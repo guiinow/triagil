@@ -1,5 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('teams')
@@ -13,10 +18,10 @@ export class Team {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ description: 'The name of the team master.' })
-  username: string;
+  user: string;
 
-  @Column({ type: 'simple-array', nullable: false })
-  @IsArray()
+  @Column({ type: 'json', nullable: true })
+  @ValidateNested()
   @ApiProperty({ description: 'The list of pokemons in the team' })
-  pokemonList: string[];
+  team: { id: number; name: string; height: number; weight: number }[];
 }

@@ -5,7 +5,7 @@ import { Team } from './entities/team.entity';
 import { TeamsService } from './teams.service';
 
 @ApiTags('teams')
-@Controller('teams')
+@Controller('api/teams')
 export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
