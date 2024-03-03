@@ -37,7 +37,7 @@ export class TeamsService {
       }
 
       const pokemonPromises = createTeamDto.team.map(async (pokemonName) => {
-        const lowercasedName = pokemonName.toLowerCase();
+        const lowercasedName = pokemonName.toLowerCase(); //note that if the first letter is uppercase, the API will not return the data
         const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${lowercasedName}`;
 
         try {
