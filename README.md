@@ -85,7 +85,13 @@ curl --request GET \
 
 ## Execução do projeto
 
-Para rodar a aplicação, basta executar o seguinte comando:
+1. Clone o repositório do *Github*:
+
+```bash
+https://github.com/guiinow/triagil.git
+```
+
+2. Para rodar a aplicação, basta executar o seguinte comando:
 
 ```bash
 docker-compose up
