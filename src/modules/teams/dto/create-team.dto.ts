@@ -17,15 +17,13 @@ export class CreateTeamDto {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        height: { type: 'number' },
-        weight: { type: 'number' },
       },
     },
     description: 'The list of pokemons in the team',
     example: [
-      { name: 'Pikachu', height: 0.4, weight: 6 },
-      { name: 'Charizard', height: 1.7, weight: 90.5 },
-      { name: 'Bulbasaur', height: 0.7, weight: 6.9 },
+      { name: 'Pikachu' },
+      { name: 'Charizard' },
+      { name: 'Bulbasaur' },
     ],
   })
   @IsNotEmpty()

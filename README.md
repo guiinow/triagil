@@ -1,73 +1,80 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Projeto Pokémon API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[Guilherme Ferreira](https://www.linkedin.com/in/guiiferreira/)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Esta aplicação web desenvolvida usando NestJS com TypeScript, para persistência de dados eu utilizei o PostgreSQL.
 
-## Description
+## Recursos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. **Testes Unitários:** Foram escritos testes unitários para todos os métodos do *teams.service* e *teams.controller*.
+![Unit test](./utils/unit-test.png)
 
-## Installation
+2. **Swagger:** Para documentação de endpoints, foi utilizado o Swagger. Esta página é acessível atráves da rota `http://127.0.0.1:3000/docs`, com a aplicação em execução.
+![Swagger1](./utils/swagger1.png)
+![swagger2](image-1.png)
 
-```bash
-$ pnpm install
-```
+3. **Limitação de Taxa de Requisições:** Eu implementei limitação de taxa de requisições para prevenir consumo intenso da API Pokémon. Esta API não especifica um limite de taxa, mas pede aos usuários que não abusem do serviço. Abaixo segue cabeçalho HTTP mostrando o limite de taxa:
+![http header](./utils/httpheader.png)
 
-## Running the app
+4. Este projeto foi desenvolvido individualmente, então não houve uso de *Branches*, *Pull requests* ou *Code Review*. No entanto, essas práticas devem ser seguidas em um ambiente de produção.
+2. O arquivo `.env` está sendo rastreado no repositório *git* no *Github* porque este é um desafio, e não um sistema para produção.
+3. Este projeto utiliza pnpm. O pnpm é um gerenciador de pacotes que oferece desempenho rápido e eficiente em termos de espaço e facilita a visualização das dependências.
+4. **Padronização de Commits:** Para padronização de commits, eu segui o [gitmoji](https://gitmoji.dev/). ![gitmoji](./utils/gitmoji.png)
+
+## Endpoints
+
+### Criação de Time
+
+Rota para criação de um time.
+
+**Método:** POST  
+**Endpoint:** /api/teams
+
+#### Exemplo de Requisição
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+curl --request POST \
+  --url http://localhost:3000/api/teams \
+  --header 'Content-Type: application/json' \
+  --header 'accept: application/json' \
+  --data '{
+  "user": "sleao",
+  "team": [
+    "blastoise",
+    "pikachu",
+    "charizard",
+    "venusaur",
+    "lapras",
+    "dragonite"
+  ]
+}'
 ```
+### Listagem de Times
+Rota para listar todos os times registrados.
 
-## Test
+**Método:** GET
+**Endpoint:** /api/teams
+
+#### Exemplo de Requisição
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+curl --request GET \
+  --url http://localhost:3000/api/teams \
+  --header 'Content-Type: application/json' \
+  --header 'accept: application/json'
 ```
 
-## Support
+### Listagem de Time por Usuário
+Rota para listar um time específico de um usuário.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**Método:** GET
+**Endpoint:** /api/teams/:user
 
-## Stay in touch
+#### Exemplo de Requisição
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+```bash
+curl --request GET \
+  --url http://localhost:3000/api/teams/sleao \
+  --header 'Content-Type: application/json' \
+  --header 'accept: application/json'
+```
