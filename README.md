@@ -81,3 +81,24 @@ curl --request GET \
   --header 'Content-Type: application/json' \
   --header 'accept: application/json'
 ```
+
+
+## Execução do projeto
+
+Para rodar a aplicação, basta executar o seguinte comando:
+
+```bash
+docker-compose up
+```
+Uma vez que o projeto foi dockerizado, o banco de dados PostgreSQL será inicializado automaticamente.
+
+
+## Resultados
+- POST /api/teams - Rota para criação de um time, que recebe um JSON com o nome do usuário e um array com os nomes dos pokémons.
+![alt text](./utils/post.png)
+
+- GET /api/teams - Deverá listar todos os times registrados.
+![alt text](./utils/get1.png)
+
+- GET /api/teams/{user} - Busca um time registrado por usuário
+![alt text](./utils/get2.png)
